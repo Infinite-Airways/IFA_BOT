@@ -4,20 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
   },
   "author": "Youness Khinit",
   "license": "ISC",
   "dependencies": {
-    "async": "^3.1.0",
-    "cheerio": "^1.0.0-rc.2",
-    "dblapi.js": "^2.1.0",
+    "axios": "^0.19.0",
     "discord.js": "^11.5.1",
-    "discordie": "^0.11.0",
-    "fs": "0.0.1-security",
-    "moment": "^2.22.2",
-    "node-fetch": "^2.1.2",
-    "notams": "^1.1.11",
     "weather-js": "^2.0.0"
   }
 }
