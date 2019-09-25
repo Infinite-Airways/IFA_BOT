@@ -3,13 +3,12 @@ const Discord = require('discord.js');
 const { getDataForICAO } = require('../../services/metar');
 
 const metarController = async message => {
-  message.channel.startTyping(true);
-  const icao = message.content.toLowerCase().slice(' ')[1];
+  const icao = message.content.split(' ')[1];
 
   try {
-    const response = await getDataForICAO(icao);
+    const { data } = await getDataForICAO(icao);
 
-    if (response.error) { console.log(response.error); return; }
+    if (data.error) { message.channel.send(`Error: ${data.error}`); return; }
 
     const {
       station,
@@ -19,7 +18,7 @@ const metarController = async message => {
       wind_direction,
       wind_speed,
       flight_rules,
-    } = response;
+    } = data;
 
     new Discord.Attachment('../../assets/images/infinitelogo.png');
 
@@ -50,6 +49,8 @@ const metarController = async message => {
         },
       ],
     };
+
+    message.channel.startTyping(true);
   
     message.channel.send({ 
       embed, 
@@ -57,7 +58,9 @@ const metarController = async message => {
     message.channel.stopTyping(true);
 
   } catch (error) {
-    console.log(error);
+    if (error.response.data.error) {
+      message.channel.send(error.response.data.error);
+    }
   }
 };
 

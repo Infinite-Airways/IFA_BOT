@@ -3,12 +3,12 @@ const axios = require('axios');
 const { metartoken } = require('../../config/config.json');
 
 const baseUrl = 'https://avwx.rest/api/metar';
-const options = ['translate', 'info', 'speech', 'summary'];
 
-const getDataForICAO = async icao => {
-  return axios.get(`${baseUrl}/${icao}`, {
+const getDataForICAO = icao => {
+  const url = `${baseUrl}/${icao}`;
+  return axios.get(url, {
     params: {
-      options,
+      options: 'translate,speech,info,summary',
     },
     headers: {
       Authorization: metartoken,
@@ -16,4 +16,6 @@ const getDataForICAO = async icao => {
   });
 };
 
-module.exports = getDataForICAO;
+module.exports = {
+  getDataForICAO,
+}

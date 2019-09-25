@@ -21,7 +21,7 @@ bot.on('message', message => {
       metar(message);
       break;
     default:
-      console.log('Invalid command');
+      break;
   }
 });
 

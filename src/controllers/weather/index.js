@@ -3,7 +3,9 @@ const Discord = require('discord.js');
 const weather = require('weather-js');
 
 const weatherController = message => {
-  weather.find({ search: args.join(' '), degreeType: 'F' }, (err, result) => {
+  const loc = message.content.split(' ').slice(1).join(' ');
+
+  weather.find({ search: loc, degreeType: 'F' }, (err, result) => {
     if (err) message.channel.send(err);
 
     if (result.length === undefined || result.length === 0) {
