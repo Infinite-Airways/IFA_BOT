@@ -1,4 +1,4 @@
-# IFA_BOT Logo: ![Alt](/src/assets/images/infinitelogo.png "IFA Logo")
+# IFA_BOT Logo: ![IFA LOGO](https://infiniteairways.xyz/inifnity1black.png)
 
 IFA_BOT is a bot that we have created for the sole purpose of being used on our discord server
 
