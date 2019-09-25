@@ -1,4 +1,4 @@
-<img src="https://infiniteairways.xyz/inifnity1black.png" alt="logo" width="50"/> # IFA_BOT 
+# <img src="https://infiniteairways.xyz/inifnity1black.png" alt="logo" width="50"/> IFA_BOT 
 
 IFA_BOT is a bot that we have created for the sole purpose of being used on our discord server
 
