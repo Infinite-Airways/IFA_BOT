@@ -24,7 +24,7 @@ const metarController = async message => {
 
     const embed = {
       color: 0x0091df,
-      title: '__METAR for ' + `${icao}` + '__',
+      title: '__METAR for ' + `${icao.toUpperCase()}` + '__',
       author: {
         name: '',
       },
