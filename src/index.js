@@ -4,7 +4,7 @@ const { ping, purge, weather, metar } = require('./controllers');
 const getCommand = require('./helpers/get-command');
 //Required for environment variables
 require('dotenv').config();
-const token = variables.env.BOT_TOKEN;
+const token = process.env.BOT_TOKEN;
 
 const bot = new Discord.Client();
 
