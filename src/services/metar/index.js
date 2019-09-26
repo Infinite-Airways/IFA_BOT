@@ -1,5 +1,4 @@
 'use strict';
-require('dotenv').config();
 const axios = require('axios');
 const baseUrl = 'https://avwx.rest/api/metar';
 const options = ['translate', 'info', 'speech', 'summary'];
