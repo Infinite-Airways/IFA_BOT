@@ -1,8 +1,10 @@
 'use string';
 const Discord = require('discord.js');
-const { token } = require('./config/config.json');
 const { ping, purge, weather, metar } = require('./controllers');
 const getCommand = require('./helpers/get-command');
+//Required for environment variables
+require('dotenv').config();
+const token = variables.env.BOT_TOKEN;
 
 const bot = new Discord.Client();
 

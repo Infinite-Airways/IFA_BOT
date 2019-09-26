@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "discord.js": "^11.5.1",
+    "dotenv": "^8.1.0",
     "nodemon": "^1.19.2",
     "weather-js": "^2.0.0"
   },
