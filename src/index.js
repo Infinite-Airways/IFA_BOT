@@ -24,6 +24,7 @@ bot.on('message', message => {
       break;
     default:
       console.log('Invalid command');
+      console.log(metar("EGKK"));
   }
 });
 
