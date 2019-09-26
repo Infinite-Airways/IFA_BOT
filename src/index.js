@@ -26,6 +26,7 @@ bot.on('message', message => {
 });
 
 bot.on('ready', () => {
+  bot.user.setActivity(" an ATIS | !metar", { type: 'Listening' });
   console.log('Bot started.');
 });
 
