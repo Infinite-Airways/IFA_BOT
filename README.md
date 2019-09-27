@@ -12,6 +12,7 @@ More to come in the future as this bot is being continually developed
 ## Plans for Near Future
 * Vatsim information such as ATC online
 * Possibly server moderation
+* Maybe extending the bot to other servers..?
 
 ## Contributing
 This is a private repository as tokens are currently exposed. We do not currently plan to make this public
