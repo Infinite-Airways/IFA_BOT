@@ -30,4 +30,10 @@ bot.on('ready', () => {
   console.log('Bot started.');
 });
 
+bot.on('guildMemberAdd', member => {
+  const channel = member.guild.channels.find(ch => ch.name === 'welcome');
+  if (!channel) return;
+  channel.send(`Hey ${member}, welcome to Infinite Airways :tada::hugging: !`);
+});
+
 bot.login(token);
