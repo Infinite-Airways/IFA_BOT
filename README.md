@@ -6,7 +6,7 @@ IFA_BOT is a bot that we have created for the sole purpose of being used on our 
 * Metar information by using **prefix** + **metar** + **ICAO**
 * Weather information by using **prefix** + **weather** + **location**
 * Delete messages by using **prefix** + **purge** + **number of messages**
-* Welcomes user in the ```#welcome``` channel when they join
+* Welcomes user in the ```#welcome``` channel when they join and gives them the ```Member``` and ```Unverified Pilot``` roles
 
 More to come in the future as this bot is being continually developed
 
