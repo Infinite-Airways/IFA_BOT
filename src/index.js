@@ -50,5 +50,5 @@ Here are some of the things that we do in our airline:
 Register as a pilot at https://www.infiniteairways.xyz/
 If you'd like to know more, ask us in the server!`);
 });
-
+//im pretty much done here
 bot.login(token);
