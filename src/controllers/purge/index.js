@@ -10,7 +10,7 @@ const purgeController = async message => {
 
   message.delete();
 
-  if (!message.member.roles.find(role => role.name === 'Owner')) {
+  if (!message.member.roles.find(role => role.name === 'Owners')) {
     message.channel.send('You need the \'Owners\' role to use this command.');
     return;
   }
