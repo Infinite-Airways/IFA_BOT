@@ -32,10 +32,9 @@ bot.on('ready', () => {
 
 bot.on('guildMemberAdd', member => {
   const channel = member.guild.channels.find(ch => ch.name === 'welcome');
-  var role = message.guild.roles.find(role => role.name === "Member");
   if (!channel) return;
   channel.send(`Hey ${member}, welcome to Infinite Airways, enjoy your stay :tada::hugging: !`);
-  message.member.addRole(role);
+  message.member.addRole(483854895615836160);
 });
 
 bot.login(token);
