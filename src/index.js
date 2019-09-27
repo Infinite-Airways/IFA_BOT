@@ -35,7 +35,7 @@ bot.on('guildMemberAdd', member => {
   let unverifiedRole = member.guild.roles.find(role => role.id == '566752818564694017');
   const channel = member.guild.channels.find(ch => ch.name === 'welcome');
   if (!channel) return;
-  channel.send(`Hey ${member}, welcome to Infinite Airways, enjoy your stay :tada::hugging: !`);
+  channel.send(`Hey ${member}, welcome to Infinite Airways, enjoy your stay! :tada::hugging: !`);
   member.addRole(memberRole);
   member.addRole(unverifiedRole);
 });
