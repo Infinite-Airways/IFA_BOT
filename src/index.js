@@ -33,7 +33,7 @@ bot.on('ready', () => {
 bot.on('guildMemberAdd', member => {
   const channel = member.guild.channels.find(ch => ch.name === 'welcome');
   if (!channel) return;
-  channel.send(`Hey ${member}, welcome to Infinite Airways, enjoy your stay! :tada::hugging: !`);
+  channel.send(`Hey ${member}, welcome to Infinite Airways, enjoy your stay :tada::hugging: !`);
 });
 
 bot.login(token);
