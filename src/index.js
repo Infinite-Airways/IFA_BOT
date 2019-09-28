@@ -1,10 +1,11 @@
 'use string';
 const Discord = require('discord.js');
-const { ping, purge, weather, metar } = require('./controllers');
+const { ping, purge, weather, metar, play, join, leave } = require('./controllers');
 const getCommand = require('./helpers/get-command');
 const token = process.env.BOT_TOKEN;
 
 const bot = new Discord.Client();
+//  bot.on('debug', console.log)
 
 bot.on('message', message => {
   switch (getCommand(message)) {
@@ -19,6 +20,9 @@ bot.on('message', message => {
       break;
     case 'METAR':
       metar(message);
+      break;
+    case 'PLAY':
+      play(message);
       break;
     default:
       break;
