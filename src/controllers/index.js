@@ -4,6 +4,7 @@ const metarController = require('./metar');
 const purgeController = require('./purge');
 const weatherController = require('./weather');
 const playController = require('./music/play.js');
+const leaveController = require('./music/leave.js');
 
 module.exports = {
   ping: pingController,
@@ -11,4 +12,5 @@ module.exports = {
   purge: purgeController,
   weather: weatherController,
   play: playController,
+  leave: leaveController,
 };
