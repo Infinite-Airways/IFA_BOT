@@ -9,7 +9,7 @@ const warnController = message => {
     let member1 = message.mentions.members.first() || message.guild.members.get(args[0]);
     let numArgs = args.length;
     let argsReason = args.slice(2).join(" ");
-    if (!message.member1.roles.some(r => ["Owners", "Staff"].includes(r.name)))
+    if (!message.member.roles.some(r => ["Owners", "Staff"].includes(r.name)))
         return message.reply("Sorry, you don't have permissions to use this!");
     if (numArgs < 3){
         message.channel.send("Please mention a user and a reason");
