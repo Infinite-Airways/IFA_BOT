@@ -1,4 +1,5 @@
 'use strict';
+//https://github.com/DevYukine/Music-Bot/blob/master/MusicBot.js
 const queue = new Map();
 const ytdl = require('ytdl-core-discord');
 const YouTube = require('simple-youtube-api');
