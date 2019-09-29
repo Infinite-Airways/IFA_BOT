@@ -1,6 +1,6 @@
 'use string';
 const Discord = require('discord.js');
-const { ping, purge, weather, metar, play, leave } = require('./controllers');
+const { ping, purge, weather, metar, play, leave, queue } = require('./controllers');
 const getCommand = require('./helpers/get-command');
 const token = process.env.BOT_TOKEN;
 
@@ -26,6 +26,9 @@ bot.on('message', message => {
       break;
     case 'LEAVE':
       leave(message);
+      break;
+    case 'QUEUE':
+      queue(message);
       break;
     default:
       break;
