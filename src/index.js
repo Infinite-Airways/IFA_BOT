@@ -1,6 +1,6 @@
 'use string';
 const Discord = require('discord.js');
-const { ping, purge, weather, metar, report} = require('./controllers');
+const { ping, purge, weather, metar, report, kick} = require('./controllers');
 const getCommand = require('./helpers/get-command');
 const token = process.env.BOT_TOKEN;
 
@@ -20,8 +20,10 @@ bot.on('message', message => {
     case 'METAR':
       metar(message);
       break;
-      case 'REPORT':
+    case 'REPORT':
       report(message);
+    case 'KICK':
+      kick(message);
     default:
       break;
   }

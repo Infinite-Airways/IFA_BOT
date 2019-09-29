@@ -4,6 +4,7 @@ const metarController = require('./metar');
 const purgeController = require('./purge');
 const weatherController = require('./weather');
 const reportController = require('./report');
+const kickController = require('./kick');
 
 module.exports = {
   ping: pingController,
@@ -11,4 +12,5 @@ module.exports = {
   purge: purgeController,
   weather: weatherController,
   report: reportController,
+  kick: kickController,
 };
