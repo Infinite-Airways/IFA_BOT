@@ -21,7 +21,7 @@ bot.on('message', message => {
       metar(message);
       break;
       case 'REPORT':
-        report(message);
+      report(message);
     default:
       break;
   }
