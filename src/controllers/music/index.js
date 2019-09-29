@@ -99,6 +99,10 @@ const musicController = async msg => {
         msg.channel.send(':stop_button: Stopped!');
         return undefined;
     }
+    if (args[1] === 'np'|| 'nowplaying') {
+        if (!serverQueue) return msg.channel.send('There is nothing playing.');
+        return msg.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
+    }
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
         console.log(video);
