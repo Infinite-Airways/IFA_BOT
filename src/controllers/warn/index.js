@@ -23,6 +23,7 @@ const warnController = message => {
         member = message.guild.member(user1);
     }
     message.channel.send(`Warned ${member} for ${argsReason}!`);
+    member.send(`You have been warned by <@${reporter}> for ${argsReason}`);
 
     const embed = {
         color: 0x0091df,
