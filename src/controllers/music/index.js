@@ -90,7 +90,15 @@ const musicController = async msg => {
 			return msg.channel.send('▶ Resumed!');
 		}
 		return msg.channel.send('There is nothing playing.');
-	}
+    }
+    if (args[1] === 'stop') {
+        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
+		serverQueue.songs = [];
+        serverQueue.connection.dispatcher.end('Stopped!');
+        msg.channel.send(':stop_button: Stopped!');
+        return undefined;
+    }
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
         console.log(video);
