@@ -7,6 +7,7 @@ IFA_BOT is a bot that we have created for the sole purpose of being used on our 
 * Weather information by using **prefix** + **weather** + **location**
 * Delete messages by using **prefix** + **purge** + **number of messages**
 * Welcomes user in the ```#welcome``` channel and in DM's when they join and gives them the ```Member``` and ```Unverified Pilot``` roles
+* Plays music by using **prefix** + **music** + **command** + **link or search term**
 
 More to come in the future as this bot is being continually developed
 

@@ -20,7 +20,7 @@ const metarController = async message => {
       flight_rules,
     } = data;
 
-    new Discord.Attachment('../../assets/images/infinitelogo.png');
+    const logo = new Discord.Attachment('./src/assets/images/infinitelogo.png');
 
     const embed = {
       color: 0x0091df,
@@ -45,7 +45,7 @@ const metarController = async message => {
         {
           name: `\u200b \n__Sky Conditions__`,
           value: `**Clouds:** ${translate.clouds}
-            **Flight Rules:** ${flight_rules}`,
+**Flight Rules:** ${flight_rules}`,
         },
       ],
     };
@@ -53,7 +53,7 @@ const metarController = async message => {
     message.channel.startTyping(true);
   
     message.channel.send({ 
-      embed, 
+       /*files: [logo],*/ embed: embed
     });
     message.channel.stopTyping(true);
 
