@@ -22,6 +22,7 @@ bot.on('message', message => {
       break;
     case 'REPORT':
       report(message);
+      break;
     case 'KICK':
       kick(message);
     default:
