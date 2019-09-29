@@ -1,11 +1,10 @@
 'use string';
 const Discord = require('discord.js');
-const { ping, purge, weather, metar } = require('./controllers');
+const { ping, purge, weather, metar, play, leave, queue, music } = require('./controllers');
 const getCommand = require('./helpers/get-command');
 const token = process.env.BOT_TOKEN;
 
 const bot = new Discord.Client();
-
 bot.on('message', message => {
   switch (getCommand(message)) {
     case 'PING':
@@ -19,6 +18,9 @@ bot.on('message', message => {
       break;
     case 'METAR':
       metar(message);
+      break;
+    case 'MUSIC':
+      music(message);
       break;
     default:
       break;
@@ -52,3 +54,7 @@ If you'd like to know more, ask us in the server!`);
 });
 //im pretty much done here
 bot.login(token);
+
+
+
+
