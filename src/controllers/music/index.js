@@ -83,6 +83,14 @@ const musicController = async msg => {
         }
         else return msg.channel.send('There is nothing to pause.');
     }
+    if (args[1] === 'resume') {
+        if (serverQueue && !serverQueue.playing) {
+			serverQueue.playing = true;
+			serverQueue.connection.dispatcher.resume();
+			return msg.channel.send('▶ Resumed!');
+		}
+		return msg.channel.send('There is nothing playing.');
+	}
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
         console.log(video);
