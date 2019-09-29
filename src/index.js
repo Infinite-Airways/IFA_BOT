@@ -1,8 +1,10 @@
 'use string';
 const Discord = require('discord.js');
 const { ping, purge, weather, metar, music } = require('./controllers');
+const { report, kick, ban, warn } = require('./controllers');
 const getCommand = require('./helpers/get-command');
 const token = process.env.BOT_TOKEN;
+
 
 const bot = new Discord.Client();
 bot.on('message', message => {
@@ -21,6 +23,18 @@ bot.on('message', message => {
       break;
     case 'MUSIC':
       music(message);
+      break;
+    case 'REPORT':
+      report(message);
+      break;
+    case 'KICK':
+      kick(message);
+      break;
+    case 'BAN':
+      ban(message);
+      break;
+    case 'WARN':
+      warn(message);
       break;
     default:
       break;
