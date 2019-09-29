@@ -1,14 +1,18 @@
 'use strict';
+
+const musicController = async msg => {
+    const queue1 = new Map();
     const ytdl = require('ytdl-core-discord');
     const YouTube = require('simple-youtube-api');
-    const queue = new Map();
     const YTB_API = process.env.YTB_API;
     const Util = require('discord.js');
-    const playController = async msg => {
+    const args = msg.content.split(' ');
+    const serverQueue = queue1.get(msg.guild.id);
+    if (args[1] === 'play') {
         const youtube = new YouTube(YTB_API);
         const args = msg.content.split(' ');
-        const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
-        const searchString = args.slice(1).join(' ');
+        const url = args[2] ? args[2].replace(/<(.+)>/g, '$1') : '';
+        const searchString = args.slice(2).join(' ');
         const voiceChannel = msg.member.voiceChannel;
         if (!voiceChannel) return msg.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
         const permissions = voiceChannel.permissionsFor(msg.client.user);
@@ -22,8 +26,8 @@
             const playlist = await youtube.getPlaylist(url);
             const videos = await playlist.getVideos();
             for (const video of Object.values(videos)) {
-                const video2 = await youtube.getVideoByID(video.id); // eslint-disable-line no-await-in-loop
-                await handleVideo(video2, msg, voiceChannel, true); // eslint-disable-line no-await-in-loop
+                const video2 = await youtube.getVideoByID(video.id);
+                await handleVideo(video2, msg, voiceChannel, true);
             }
             return msg.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
         } else {
@@ -59,7 +63,7 @@
         }
     }
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
-        const serverQueue = queue.get(msg.guild.id);
+        const serverQueue = queue1.get(msg.guild.id);
         console.log(video);
         const song = {
             id: video.id,
@@ -75,7 +79,7 @@
                 volume: 5,
                 playing: true
             };
-            queue.set(msg.guild.id, queueConstruct);
+            queue1.set(msg.guild.id, queueConstruct);
             queueConstruct.songs.push(song);
             try {
                 var connection = await voiceChannel.join();
@@ -83,7 +87,7 @@
                 play(msg.guild, queueConstruct.songs[0]);
             } catch (error) {
                 console.error(`I could not join the voice channel: ${error}`);
-                queue.delete(msg.guild.id);
+                queue1.delete(msg.guild.id);
                 return msg.channel.send(`I could not join the voice channel: ${error}`);
             }
         } else {
@@ -95,11 +99,11 @@
         return undefined;
     }
     async function play(guild, song) {
-        const serverQueue = queue.get(guild.id);
-        
+        const serverQueue = queue1.get(guild.id);
+
         if (!song) {
             serverQueue.voiceChannel.leave();
-            queue.delete(guild.id);
+            queue1.delete(guild.id);
             return;
         }
         console.log(serverQueue.songs);
@@ -112,6 +116,22 @@
             })
             .on('error', error => console.error(error));
         serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
-    module.exports.songs = serverQueue.songs;
     }
-    module.exports = playController;
+
+    if (args[1] === 'queue') {
+        const serverQueue = queue1.get(msg.guild.id);
+        if (!serverQueue) return msg.channel.send('There is nothing playing.');
+        return msg.channel.send(`
+    __**Song queue:**__
+    ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
+    **Now playing:** ${serverQueue.songs[0].title}
+        `);
+    }
+    if (args[1] === 'skip') {
+        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+        if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
+        serverQueue.connection.dispatcher.end('Skipped!');
+        return undefined;
+    }
+}
+module.exports = musicController;
