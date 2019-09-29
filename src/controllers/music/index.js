@@ -20,44 +20,50 @@ const musicController = async msg => {
         if (!permissions.has('SPEAK')) {
             return msg.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
         }
-        if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
-            const playlist = await youtube.getPlaylist(url);
-            const videos = await playlist.getVideos();
-            for (const video of Object.values(videos)) {
-                const video2 = await youtube.getVideoByID(video.id);
-                await handleVideo(video2, msg, voiceChannel, true);
-            }
-            return msg.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
-        } else {
-            try {
-                var video = await youtube.getVideo(url);
-            } catch (error) {
+        if (msg.guild.voiceConnection == null){
+
+            if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
+                const playlist = await youtube.getPlaylist(url);
+                const videos = await playlist.getVideos();
+                for (const video of Object.values(videos)) {
+                    const video2 = await youtube.getVideoByID(video.id);
+                    await handleVideo(video2, msg, voiceChannel, true);
+                }
+                return msg.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
+            } else {
                 try {
-                    var videos = await youtube.searchVideos(searchString, 10);
-                    let index = 0;
-                    msg.channel.send(`
-    __**Song selection:**__
-    ${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
-    Please provide a value to select one of the search results ranging from 1-10.
-                    `);
+                    var video = await youtube.getVideo(url);
+                } catch (error) {
                     try {
-                        var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
-                            maxMatches: 1,
-                            time: 10000,
-                            errors: ['time']
-                        });
+                        var videos = await youtube.searchVideos(searchString, 10);
+                        let index = 0;
+                        msg.channel.send(`
+__**Song selection:**__
+${videos.map(video2 => `**${++index} -** ${video2.title}`).join('\n')}
+Please provide a value to select one of the search results ranging from 1-10.
+                        `);
+                        try {
+                            var response = await msg.channel.awaitMessages(msg2 => msg2.content > 0 && msg2.content < 11, {
+                                maxMatches: 1,
+                                time: 10000,
+                                errors: ['time']
+                            });
+                        } catch (err) {
+                            console.error(err);
+                            return msg.channel.send('No or invalid value entered, cancelling video selection.');
+                        }
+                        const videoIndex = parseInt(response.first().content);
+                        var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
                     } catch (err) {
                         console.error(err);
-                        return msg.channel.send('No or invalid value entered, cancelling video selection.');
+                        return msg.channel.send('🆘 I could not obtain any search results.');
                     }
-                    const videoIndex = parseInt(response.first().content);
-                    var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
-                } catch (err) {
-                    console.error(err);
-                    return msg.channel.send('🆘 I could not obtain any search results.');
                 }
+                return handleVideo(video, msg, voiceChannel);
             }
-            return handleVideo(video, msg, voiceChannel);
+        }
+        else if (msg.guild.voiceConnection.channel !== voiceChannel){
+            return msg.channel.send('You must be in the same voice channel as me.')
         }
     }
     if (args[1] === 'queue') {
@@ -70,34 +76,47 @@ const musicController = async msg => {
         `);
     }
     if (args[1] === 'skip') {
-        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-        if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
-        serverQueue.connection.dispatcher.end('Skipped!');
-        return undefined;
+        if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
+            if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+            if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
+            serverQueue.connection.dispatcher.end('Skipped!');
+            return undefined;
+        }
+        else return msg.channel.send('You must be in the same voice channel as me.');
     }
     if (args[1] === 'pause') {
-		if (serverQueue && serverQueue.playing) {
-			serverQueue.playing = false;
-			serverQueue.connection.dispatcher.pause();
-            return msg.channel.send('⏸ Paused');
+        console.log(msg.guild.voiceConnection);
+        if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
+            if (serverQueue && serverQueue.playing) {
+                serverQueue.playing = false;
+                serverQueue.connection.dispatcher.pause();
+                return msg.channel.send('⏸ Paused');
+            }
+            else return msg.channel.send('There is nothing to pause.');
         }
-        else return msg.channel.send('There is nothing to pause.');
+        else return msg.channel.send('You must be in the same voice channel as me.');
     }
     if (args[1] === 'resume') {
-        if (serverQueue && !serverQueue.playing) {
-			serverQueue.playing = true;
-			serverQueue.connection.dispatcher.resume();
-			return msg.channel.send('▶ Resumed!');
-		}
-		return msg.channel.send('There is nothing playing.');
+        if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
+            if (serverQueue && !serverQueue.playing) {
+                serverQueue.playing = true;
+                serverQueue.connection.dispatcher.resume();
+                return msg.channel.send('▶ Resumed!');
+            }
+            return msg.channel.send('There is nothing playing.');
+        }
+        else return msg.channel.send('You must be in the same voice channel as me.');
     }
     if (args[1] === 'stop') {
-        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-		if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
-		serverQueue.songs = [];
-        serverQueue.connection.dispatcher.end('Stopped!');
-        msg.channel.send(':stop_button: Stopped!');
-        return undefined;
+        if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
+            if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+            if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
+            serverQueue.songs = [];
+            serverQueue.connection.dispatcher.end('Stopped!');
+            msg.channel.send(':stop_button: Stopped!');
+            return undefined;
+        }
+        else return msg.channel.send('You must be in the same voice channel as me.');
     }
     if (args[1] === 'np'|| 'nowplaying') {
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
