@@ -5,6 +5,8 @@ const ytdl = require('ytdl-core-discord');
 const YouTube = require('simple-youtube-api');
 const YTB_API = process.env.YTB_API;
 const youtube = new YouTube(YTB_API);
+const botconfig = require('../../config/botconfig.json');
+const prefix = botconfig.prefix;
 const musicController = async msg => {
     const Util = require('discord.js');
     const args = msg.content.split(' ');
@@ -67,7 +69,7 @@ Please provide a value to select one of the search results ranging from 1-10.
             return msg.channel.send('You must be in the same voice channel as me.')
         }
     }
-    if (args[1] === 'queue') {
+    else if (args[1] === 'queue') {
         const serverQueue = queue.get(msg.guild.id);
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
         return msg.channel.send(`
@@ -76,7 +78,7 @@ Please provide a value to select one of the search results ranging from 1-10.
     **Now playing:** ${serverQueue.songs[0].title}
         `);
     }
-    if (args[1] === 'skip') {
+    else if (args[1] === 'skip') {
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
             if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
@@ -85,7 +87,7 @@ Please provide a value to select one of the search results ranging from 1-10.
         }
         else return msg.channel.send('You must be in the same voice channel as me.');
     }
-    if (args[1] === 'pause') {
+    else if (args[1] === 'pause') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (serverQueue && serverQueue.playing) {
@@ -97,7 +99,7 @@ Please provide a value to select one of the search results ranging from 1-10.
         }
         else return msg.channel.send('You must be in the same voice channel as me.');
     }
-    if (args[1] === 'resume') {
+    else if (args[1] === 'resume') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (serverQueue && !serverQueue.playing) {
@@ -109,7 +111,7 @@ Please provide a value to select one of the search results ranging from 1-10.
         }
         else return msg.channel.send('You must be in the same voice channel as me.');
     }
-    if (args[1] === 'stop') {
+    else if (args[1] === 'stop') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
@@ -121,14 +123,12 @@ Please provide a value to select one of the search results ranging from 1-10.
         }
         else return msg.channel.send('You must be in the same voice channel as me.');
     }
-    if (args[1] === 'np' ||args[1] === 'nowplaying') {
+    else if (args[1] === 'np' ||args[1] === 'nowplaying') {
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
         return msg.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
     }
-    if (args[1] === 'help') {
-        const Discord = require('discord.js');
-        const botconfig = require('../../config/botconfig.json');
-        const prefix = botconfig.prefix;
+    else if (args[1] === 'help') {
+        const Discord = require('discord.js')
         msg.reply('Sent you a DM.');
         const thumb = new Discord.Attachment('./src/assets/images/infinitelogo.png');
         const embed1 = {
@@ -155,6 +155,7 @@ Please provide a value to select one of the search results ranging from 1-10.
         };
         msg.member.send({ files: [thumb], embed: embed1 });
     }
+    else return msg.reply(`That command does not exist. Help : ${prefix}music help`);
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
         console.log(video);
