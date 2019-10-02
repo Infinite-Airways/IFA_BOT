@@ -59,7 +59,12 @@ const metarController = async message => {
 
   } catch (error) {
     if (error.response.data.error) {
-      message.channel.send(error.response.data.error);
+      if (icao == undefined){
+        message.channel.send(`Please enter an ICAO station ident`);
+      } else{
+        message.channel.send(`${icao.toUpperCase()} is not a valid ICAO station ident`);
+      }
+      
     }
   }
 };

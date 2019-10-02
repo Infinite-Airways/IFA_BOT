@@ -9,6 +9,7 @@ const kickController = require('./kick');
 const banController = require('./ban');
 const warnController = require('./warn');
 const icaoController = require('./icao');
+const vatsimController = require('./vatsim');
 
 module.exports = {
   ping: pingController,
@@ -21,4 +22,5 @@ module.exports = {
   ban: banController,
   warn: warnController,
   icao: icaoController,
+  vatsim: vatsimController,
 };
