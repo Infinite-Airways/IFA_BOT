@@ -20,7 +20,7 @@ const icaoController = async message => {
 
   } catch (error) {
     if (error.response.data.error) {
-      message.channel.send(error.response.data.error);
+      message.channel.send("Please enter an ICAO code");
     }
   }
 };
