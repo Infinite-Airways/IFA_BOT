@@ -1,26 +1,28 @@
 'use strict';
-const Discord = require('discord.js');
-const fetch = require("node-fetch");
-var text = "";
+const vatsim = require('../../services/vatsim');
 
-fetch('http://us.data.vatsim.net/vatsim-data.txt')
-    .then(response => response.text())
-    .then(text => console.log(JSON.parse(text)))
-
-var timerID = setInterval(function() {
-    fetch('http://us.data.vatsim.net/vatsim-data.txt')
-    .then(response => response.text())
-    .then(text => console.log(text))
-}, 120 * 1000); 
-
-
-const vatsimController = message => {
-
-    message.channel.send('Vatsim!');
+const dataUpdated = () => {
+  console.log(new Date() + ': Data updated, updating again in 3 minutes');
 };
 
+const dataFailed = () => {
+  updateData();
+};
 
+const updateData = () => {
+  vatsim.updateVatsimData(dataUpdated, dataFailed);
+};
 
+vatsim.init();
 
+const mins = 1 * 60 * 1000;
+
+setInterval(() => {
+  updateData();
+}, mins);
+
+const vatsimController = message => {
+  const callsign = message.content.split(' ')[1];
+};
 
 module.exports = vatsimController;
