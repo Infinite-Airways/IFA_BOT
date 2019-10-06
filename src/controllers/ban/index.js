@@ -1,6 +1,6 @@
 'use strict';
 const banController = message => {
-    const prefix = "?";
+    var prefix = require('../../helpers/get-command.js').gprefix;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     if (!message.member.roles.some(r => ["Owners", "Staff"].includes(r.name)))
         return message.reply("Sorry, you don't have permissions to use this!");

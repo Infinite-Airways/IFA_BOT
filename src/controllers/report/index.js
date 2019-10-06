@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 const reportController = message => {
-    const prefix = "?";
+    var prefix = require('../../helpers/get-command.js').gprefix;
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     let reason1 = args.slice(2).join(' ');
     let member1 = message.mentions.members.first() || message.guild.members.get(args[0]);

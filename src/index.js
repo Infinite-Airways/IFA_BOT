@@ -1,11 +1,9 @@
 'use string';
 const Discord = require('discord.js');
-const { ping, purge, weather, metar, music, report, kick, ban, warn, icao, vatsim } = require('./controllers');
+const { ping, purge, weather, metar, music, report, kick, ban, warn, icao, vatsim, prefix } = require('./controllers');
 const getCommand = require('./helpers/get-command');
-const token = process.env.BOT_TOKEN;
-
-
 const bot = new Discord.Client();
+const token = process.env.BOT_TOKEN;
 bot.on('message', message => {
   switch (getCommand(message)) {
     case 'PING':
@@ -41,16 +39,17 @@ bot.on('message', message => {
     case 'VATSIM':
       vatsim(message);
       break;
+    case 'PREFIX':
+      prefix(message);
+      break;
     default:
       break;
   }
 });
-
 bot.on('ready', () => {
   bot.user.setActivity("an ATIS |!metar", { type: 'Listening' });
   console.log('Bot started.');
 });
-
 bot.on('guildMemberAdd', member => {
   let memberRole = member.guild.roles.find(role => role.id == '483854895615836160');
   let unverifiedRole = member.guild.roles.find(role => role.id == '566752818564694017');
@@ -73,7 +72,3 @@ If you'd like to know more, ask us in the server!`);
 });
 //im pretty much done here
 bot.login(token);
-
-
-
-

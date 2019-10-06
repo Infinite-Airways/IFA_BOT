@@ -6,8 +6,8 @@ const YouTube = require('simple-youtube-api');
 const YTB_API = process.env.YTB_API;
 const youtube = new YouTube(YTB_API);
 const botconfig = require('../../config/botconfig.json');
-const prefix = botconfig.prefix;
 const musicController = async msg => {
+    var prefix = require('../../helpers/get-command.js').gprefix;
     const Util = require('discord.js');
     const args = msg.content.split(' ');
     const serverQueue = queue.get(msg.guild.id);
@@ -142,14 +142,14 @@ Please provide a value to select one of the search results ranging from 1-10.
             },
             fields: [
             {
-                name: `**${prefix}Play** + Search term or youtube URL: Plays/adds music to the queue.
-**${prefix}Queue**: Shows the queue.
-**${prefix}Skip**: Skips the current song.
-**${prefix}Pause**: Pauses the song.
-**${prefix}Resume**: Resumes the song.
-**${prefix}Stop**: Stops the song.
-**${prefix}Np**: Shows *'now playing'*.`,
-                value: `\u200b`,
+                name: `\u200b`,                
+                value: `**${prefix}music + Play** + Search term or youtube URL: Plays/adds music to the queue.
+**${prefix}music + Queue**: Shows the queue.
+**${prefix}music + Skip**: Skips the current song.
+**${prefix}music + Pause**: Pauses the song.
+**${prefix}music + Resume**: Resumes the song.
+**${prefix}music + Stop**: Stops the song.
+**${prefix}music + Np**: Shows *'now playing'*.`,
             },
             ],
         };
