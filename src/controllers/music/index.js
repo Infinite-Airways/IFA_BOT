@@ -6,6 +6,9 @@ const YouTube = require('simple-youtube-api');
 const YTB_API = process.env.YTB_API;
 const youtube = new YouTube(YTB_API);
 const botconfig = require('../../config/botconfig.json');
+const Discord = require('discord.js');
+const client = new Discord.Client();
+
 const musicController = async msg => {
     var prefix = require('../../helpers/get-command.js').gprefix;
     const Util = require('discord.js');
@@ -128,7 +131,6 @@ Please provide a value to select one of the search results ranging from 1-10.
         return msg.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
     }
     else if (args[1] === 'help') {
-        const Discord = require('discord.js')
         msg.reply('Sent you a DM.');
         const thumb = new Discord.Attachment('./src/assets/images/infinitelogo.png');
         const embed1 = {
@@ -155,6 +157,20 @@ Please provide a value to select one of the search results ranging from 1-10.
         };
         msg.member.send({ files: [thumb], embed: embed1 });
     }
+    else if (args[1] === 'loopqueue') {
+        var guild = {};
+        const serverQueue = queue.get(msg.guild.id);
+        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+        if(!serverQueue) return msg.channel.send('Not playing anything right now');
+        if(serverQueue.voiceChannel.id !== msg.member.voiceChannel.id) return msg.channel.send(`You must be in **${serverQueue.voiceChannel.name}** to loop the queue`);
+        serverQueue.loop = !serverQueue.loop;
+        queue.set(msg.guild.id, serverQueue);
+        //play(guild, serverQueue.songs[0]);
+        if(serverQueue.loop) return msg.channel.send('**🔁 Repeated current queue!**');
+        return msg.channel.send('**🔁 Unrepeated current queue!**');
+    }
+
+
     else return msg.reply(`That command does not exist. Help : ${prefix}music help`);
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
@@ -205,7 +221,8 @@ Please provide a value to select one of the search results ranging from 1-10.
             .on('end', reason => {
                 if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
                 else console.log(reason);
-                serverQueue.songs.shift();
+                if (serverQueue.loop === true) serverQueue.songs.push(serverQueue.songs.shift());
+                else serverQueue.songs.shift();
                 play(guild, serverQueue.songs[0]);
             })
             .on('error', error => console.error(error));
