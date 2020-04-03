@@ -1,6 +1,7 @@
 'use strict';
 //https://github.com/DevYukine/Music-Bot/blob/master/MusicBot.js
 const queue = new Map();
+require('dotenv').config();
 const ytdl = require('ytdl-core-discord');
 const YouTube = require('simple-youtube-api');
 const YTB_API = process.env.YTB_API;
@@ -26,7 +27,7 @@ const musicController = async msg => {
         if (!permissions.has('SPEAK')) {
             return msg.channel.send('I cannot speak in this voice channel, make sure I have the proper permissions!');
         }
-        if (msg.guild.voiceConnection == null || msg.guild.voiceConnection.channel == voiceChannel){
+        if (msg.guild.voiceConnection == null || msg.guild.voiceConnection.channel == voiceChannel) {
 
             if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
                 const playlist = await youtube.getPlaylist(url);
@@ -67,12 +68,10 @@ Please provide a value to select one of the search results ranging from 1-10.
                 }
                 return handleVideo(video, msg, voiceChannel);
             }
-        }
-        else if (msg.guild.voiceConnection.channel !== voiceChannel){
+        } else if (msg.guild.voiceConnection.channel !== voiceChannel) {
             return msg.channel.send('You must be in the same voice channel as me.')
         }
-    }
-    else if (args[1] === 'queue') {
+    } else if (args[1] === 'queue') {
         const serverQueue = queue.get(msg.guild.id);
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
         return msg.channel.send(`
@@ -80,29 +79,23 @@ Please provide a value to select one of the search results ranging from 1-10.
     ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
     **Now playing:** ${serverQueue.songs[0].title}
         `);
-    }
-    else if (args[1] === 'skip') {
+    } else if (args[1] === 'skip') {
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
             if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
             serverQueue.connection.dispatcher.end('Skipped!');
             return undefined;
-        }
-        else return msg.channel.send('You must be in the same voice channel as me.');
-    }
-    else if (args[1] === 'pause') {
+        } else return msg.channel.send('You must be in the same voice channel as me.');
+    } else if (args[1] === 'pause') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (serverQueue && serverQueue.playing) {
                 serverQueue.playing = false;
                 serverQueue.connection.dispatcher.pause();
                 return msg.channel.send('⏸ Paused');
-            }
-            else return msg.channel.send('There is nothing to pause.');
-        }
-        else return msg.channel.send('You must be in the same voice channel as me.');
-    }
-    else if (args[1] === 'resume') {
+            } else return msg.channel.send('There is nothing to pause.');
+        } else return msg.channel.send('You must be in the same voice channel as me.');
+    } else if (args[1] === 'resume') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (serverQueue && !serverQueue.playing) {
@@ -111,10 +104,8 @@ Please provide a value to select one of the search results ranging from 1-10.
                 return msg.channel.send('▶ Resumed!');
             }
             return msg.channel.send('There is nothing playing.');
-        }
-        else return msg.channel.send('You must be in the same voice channel as me.');
-    }
-    else if (args[1] === 'stop') {
+        } else return msg.channel.send('You must be in the same voice channel as me.');
+    } else if (args[1] === 'stop') {
         if (msg.guild.voiceConnection == null) return msg.channel.send('There is nothing playing.');
         if (msg.member.voiceChannel === msg.guild.voiceConnection.channel) {
             if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
@@ -123,28 +114,24 @@ Please provide a value to select one of the search results ranging from 1-10.
             serverQueue.connection.dispatcher.end('Stopped!');
             msg.channel.send(':stop_button: Stopped!');
             return undefined;
-        }
-        else return msg.channel.send('You must be in the same voice channel as me.');
-    }
-    else if (args[1] === 'np' ||args[1] === 'nowplaying') {
+        } else return msg.channel.send('You must be in the same voice channel as me.');
+    } else if (args[1] === 'np' || args[1] === 'nowplaying') {
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
         return msg.channel.send(`🎶 Now playing: **${serverQueue.songs[0].title}**`);
-    }
-    else if (args[1] === 'help') {
+    } else if (args[1] === 'help') {
         msg.reply('Sent you a DM.');
         const thumb = new Discord.Attachment('./src/assets/images/infinitelogo.png');
         const embed1 = {
             color: 0x0091df,
             title: '**__Music Commands__**',
             author: {
-            name: '',
+                name: '',
             },
             thumbnail: {
-            url: 'attachment://infinitelogo.png',
+                url: 'attachment://infinitelogo.png',
             },
-            fields: [
-            {
-                name: `\u200b`,                
+            fields: [{
+                name: `\u200b`,
                 value: `**${prefix}music + Play** + Search term or youtube URL: Plays/adds music to the queue.
 **${prefix}music + Queue**: Shows the queue.
 **${prefix}music + Skip**: Skips the current song.
@@ -152,26 +139,24 @@ Please provide a value to select one of the search results ranging from 1-10.
 **${prefix}music + Resume**: Resumes the song.
 **${prefix}music + Stop**: Stops the song.
 **${prefix}music + Np**: Shows *'now playing'*.`,
-            },
-            ],
+            }, ],
         };
-        msg.member.send({ files: [thumb], embed: embed1 });
-    }
-    else if (args[1] === 'loopqueue') {
+        msg.member.send({
+            files: [thumb],
+            embed: embed1
+        });
+    } else if (args[1] === 'loopqueue') {
         var guild = {};
         const serverQueue = queue.get(msg.guild.id);
         if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
-        if(!serverQueue) return msg.channel.send('Not playing anything right now');
-        if(serverQueue.voiceChannel.id !== msg.member.voiceChannel.id) return msg.channel.send(`You must be in **${serverQueue.voiceChannel.name}** to loop the queue`);
+        if (!serverQueue) return msg.channel.send('Not playing anything right now');
+        if (serverQueue.voiceChannel.id !== msg.member.voiceChannel.id) return msg.channel.send(`You must be in **${serverQueue.voiceChannel.name}** to loop the queue`);
         serverQueue.loop = !serverQueue.loop;
         queue.set(msg.guild.id, serverQueue);
         //play(guild, serverQueue.songs[0]);
-        if(serverQueue.loop) return msg.channel.send('**🔁 Repeated current queue!**');
+        if (serverQueue.loop) return msg.channel.send('**🔁 Repeated current queue!**');
         return msg.channel.send('**🔁 Unrepeated current queue!**');
-    }
-
-
-    else return msg.reply(`That command does not exist. Help : ${prefix}music help`);
+    } else return msg.reply(`That command does not exist. Help : ${prefix}music help`);
     async function handleVideo(video, msg, voiceChannel, playlist = false) {
         const serverQueue = queue.get(msg.guild.id);
         console.log(video);
@@ -217,7 +202,11 @@ Please provide a value to select one of the search results ranging from 1-10.
             return;
         }
         console.log(serverQueue.songs);
-        const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url), { filter : 'audioonly', bitrate: 96000, quality : 'highestaudio'})
+        const dispatcher = serverQueue.connection.playOpusStream(await ytdl(song.url), {
+                filter: 'audioonly',
+                bitrate: 96000,
+                quality: 'highestaudio'
+            })
             .on('end', reason => {
                 if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
                 else console.log(reason);
