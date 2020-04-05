@@ -17,4 +17,4 @@ More to come in the future as this bot is being continually developed
 * Maybe extending the bot to other servers..?
 
 ## Contributing
-This is a private repository as tokens are currently exposed. We do not currently plan to make this public
+This was a private repository however tokens are no longer exposed. We will be trying to make this available to multiple discord servers in the near future...
